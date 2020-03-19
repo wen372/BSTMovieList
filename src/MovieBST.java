@@ -1,44 +1,93 @@
 /* The MovieBST implementation */
 
+import java.util.ArrayList;
+//Binary search tree for movie nodes
 public class MovieBST {
     Movie root;
 
-    public void subSet(String start, String end){
-        // Selects movie titles that fall alphabetically between start and end.
+    //add a Movie node into the BST
+    public void add(Movie add) {
+        root = addRecursive(root, add);
     }
 
-    // more methods
+    //Uses recursion to find correct spot to add into
+    private Movie addRecursive(Movie tree, Movie add) {
+        if (tree == null) {
+            tree = add;
+        }
+        else if (tree.compareTo(add) == 0) {
+            return tree;
+        }
+        //if add > tree
+        else if (tree.compareTo(add) < 0) {
+            tree.right = addRecursive(tree.right, add);
 
-
-    public Movie sortedArrayToBST(Movie[] movies) {
-
-        return helper(movies, 0, movies.length - 1);
+        }
+        //if add < tree
+        else if (tree.compareTo(add) > 0) {
+            tree.left = addRecursive(tree.left, add);
+        }
+        return tree;
     }
 
-    public Movie helper(Movie[] movies, int low, int high) {
-        if(low > high) {
+    //prints tree in order
+    public Movie printInOrder(Movie root){
+        if(root == null){
             return null;
         }
-
-        int mid = low + (high - low)/2;
-        //center val of sorted array as the root of the bst
-        Movie head = movies[mid];
-
-        //left of the mid value should go to the left of this root node to satisfy bst
-        head.left = helper(movies, low, mid - 1);
-        //right of the mid value should go to the right of this root node to satisfy bst
-        head.right = helper(movies, mid + 1, high);
-        return head;
-
+        printInOrder(root.left);
+        System.out.println(root.getTitle());
+        printInOrder(root.right);
+        return null;
     }
 
-    public void traverseInOrder(Movie node) {
-        if (node != null) {
-            traverseInOrder(node.left);
-            System.out.println(" " + node);
-            traverseInOrder(node.right);
+    //returns arraylist of movies bounded between two songs
+    public ArrayList<Movie> subSetList(ArrayList<Movie> array, Movie root, String start, String end) {
+        // Selects movie titles that fall alphabetically between start and end.
+        //case 1 root == null
+        if(root == null){
+            return array;
         }
+        //root is between bounds
+        if(root.getTitle().compareToIgnoreCase(start) >= 0 && root.getTitle().compareToIgnoreCase(end) <= 0){
+            subSetList(array, root.left,start,end);
+            array.add(root);
+            subSetList(array, root.right,start,end);
+        }
+        //root is less than start
+        if(root.getTitle().compareToIgnoreCase(start) <= -1){
+            subSetList(array, root.right,start,end);
+        }
+        //root is greater than end
+        if(root.getTitle().compareToIgnoreCase(end) >= 1){
+            subSetList(array, root.left,start,end);
+        }
+
+        return array;
     }
 
+    //prints tree in order bounded by two song names
+    public void printSubSet(Movie root, String start, String end){
+
+        //case 1 root == null
+        if(root == null){
+            return;
+        }
+        //root is between bounds
+        if(root.getTitle().compareToIgnoreCase(start) >= 0 && root.getTitle().compareToIgnoreCase(end) <= 0){
+            printSubSet(root.left,start,end);
+            System.out.println(root.getTitle());
+            printSubSet(root.right,start,end);
+        }
+        //root is less than start
+        if(root.getTitle().compareToIgnoreCase(start) <= -1){
+            printSubSet(root.right,start,end);
+        }
+        //root is greater than end
+        if(root.getTitle().compareToIgnoreCase(end) >= 1){
+            printSubSet(root.left,start,end);
+        }
+
+    }
 
 }

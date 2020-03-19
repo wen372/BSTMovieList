@@ -7,11 +7,17 @@ public class Movie implements Comparable<Movie> {
     private int movieId; //optional
     public Movie left;
     public Movie right;
-    // methods
+
+    //no args constructor
     public Movie(){
 
     }
 
+    //Constructor that accepts string and assigns to title
+    public Movie(String title) {
+        this.title = title;
+    }
+    //constructor for all fields
     public Movie(int ID, String title, int releaseYear, String[] genres){
         this.movieId = ID;
         this.title = title;
@@ -40,6 +46,7 @@ public class Movie implements Comparable<Movie> {
         return genres;
     }
 
+    //accepts scanner and returns new Movie object
     public static Movie readMovie(Scanner in){
         if(!(in.hasNextLine()))
             return null;
@@ -68,7 +75,7 @@ public class Movie implements Comparable<Movie> {
                     parenthesisSpot = line.indexOf('(', parenthesisSpot + 1);
                 }
             }
-            title = line.substring(0, parenthesisSpot);
+            title = line.substring(0, parenthesisSpot-1);
             //removes substring that was taken out
             line = line.substring(parenthesisSpot+1);
             //gets release year of movie
@@ -82,8 +89,6 @@ public class Movie implements Comparable<Movie> {
             line = line.substring(line.indexOf(')')+2);
         }
 
-
-
         //gets movie generes and stores into an array
         String [] genres = new String[1];
         if(line.contains("no genres"))
@@ -95,13 +100,12 @@ public class Movie implements Comparable<Movie> {
         return new Movie(ID, title, releaseDate, genres);
     }
 
-
-
     //returns name and release year
     public String toString(){
         return title + " " + releaseYear;
     }
 
+    //compareTo implemented in order to compare objects by title
     @Override
     public int compareTo(Movie other){
         return title.compareToIgnoreCase(other.title);
