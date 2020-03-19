@@ -1,4 +1,7 @@
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+import java.util.ArrayList;
 import java.io.File;
 
 //creates BST using movieslends data as input and prints out subsets between two songs as examples of the tree
@@ -27,6 +30,12 @@ public class Main {
             bst.add(movieList);
             count++;
         }
+
+
+
+
+
+
         System.out.println(count + " Movies added into BST\n");
         //bst.printInOrder(bst.root);
 
@@ -47,9 +56,42 @@ public class Main {
         System.out.println("The subset of movies between Toy Story AND WALL·E: ");
         bst.printSubSet(bst.root,"Toy Story","WALL·E");
 
+        //print output to file
+        printToFile(count,bst);
+
     }
 
+    public static void printToFile(int count, MovieBST bst)throws Exception{
 
+        //print to file
+        PrintStream output = new PrintStream(new FileOutputStream(new File("../output/output.txt")));
+        output.println(count + " Movies added into BST\n");
+
+        //Uses subSetList in order to print subset between two songs
+        output.println("The subset of movies between Bug's Life AND Harry Potter and the Sorcerer's Stone (a.k.a. Harry Potter and the Philosopher's Stone) is:");
+        ArrayList<Movie> subset = new ArrayList<>();
+        subset = bst.subSetList(subset, bst.root,"Bug's Life","Harry Potter and the Sorcerer's Stone (a.k.a. Harry Potter and the Philosopher's Stone)");
+        for(Movie titles : subset){
+            output.println(titles.getTitle());
+        }
+        output.println();
+
+        subset.clear();
+        output.println("The subset of movies between Back to the Future AND Hulk is: ");
+        subset = bst.subSetList(subset, bst.root,"Back to the Future","Hulk");
+        for(Movie titles : subset){
+            output.println(titles.getTitle());
+        }
+
+        output.println();
+
+        subset.clear();
+        output.println("The subset of movies between Toy Story AND WALL·E: ");
+        subset = bst.subSetList(subset, bst.root,"Toy Story","WALL·E");
+        for(Movie titles : subset){
+            output.println(titles.getTitle());
+        }
+    }
 
 
 
